@@ -59,6 +59,9 @@ jobs:
           directory: ${{ github.event.inputs.directory }}
           type: "zip"
           exclusions: "jupyterbook.tar.gz"
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%dT%H:%M:%S')"
       - name: Create release
         id: create_release
         uses: actions/create-release@v1
@@ -69,9 +72,6 @@ jobs:
           release_name: ${{ github.event.inputs.releasename }}
           draft: false
           prerelease: false
-      - name: Get current date
-        id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%dT%H:%M:%S')"
       - name: Upload zip
         id: upload-zip
         uses: actions/upload-release-asset@v1
