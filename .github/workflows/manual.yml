@@ -52,23 +52,21 @@ jobs:
     steps:
       - name: Test input values
         run: |
-          echo "directory: ${{ github.events.inputs.directory }}"
-          echo "final file name: ${{ github.events.inputs.bookname }}-${{ github.events.inputs.versionnumber }}-${{ github.events.inputs.languageid }}"
+          echo "directory: ${{ github.event.inputs.directory }}"
+          echo "final file name: ${{ github.event.inputs.bookname }}-${{ github.event.inputs.versionnumber }}-${{ github.event.inputs.languageid }}"
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Archive to zip
         uses: thedoctor0/zip-release@master
         with:
           filename: jupyterbook.zip
-          path: '.'
-          directory: '.'
-          exclusions: ''
+          directory: ${{ github.event.inputs.directory }}
           type: "zip"
       - name: Archive to tar
         uses: thedoctor0/zip-release@master
         with:
           filename: jupyterbook.tar.gz
-          directory: ${{ github.events.inputs.directory }}
+          directory: ${{ github.event.inputs.directory }}
           type: "tar"
       - name: Create release
         id: create_release
@@ -77,7 +75,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: "Automated"
-          release_name: ${{ github.events.inputs.releasename }}
+          release_name: ${{ github.event.inputs.releasename }}
           draft: false
           prerelease: false
       - name: Upload zip
@@ -88,7 +86,7 @@ jobs:
         with: 
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path:  ./jupyterbook.zip
-          asset_name: ${{ github.events.inputs.bookname }}-${{ github.events.inputs.versionnumber }}-${{ github.events.inputs.languageid }}.zip
+          asset_name: ${{ github.event.inputs.bookname }}-${{ github.event.inputs.versionnumber }}-${{ github.event.inputs.languageid }}.zip
           asset_content_type: application/zip
       - name: Upload tar
         id: upload-tar
@@ -98,6 +96,6 @@ jobs:
         with: 
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path:  ./jupyterbook.tar.gz
-          asset_name: ${{ github.events.inputs.bookname }}-${{ github.events.inputs.versionnumber }}-${{ github.events.inputs.languageid }}.tar.gz
+          asset_name: ${{ github.event.inputs.bookname }}-${{ github.event.inputs.versionnumber }}-${{ github.event.inputs.languageid }}.tar.gz
           asset_content_type: application/x-compressed-tar
         #run: echo "Hello ${{ github.event.inputs.name }}"
