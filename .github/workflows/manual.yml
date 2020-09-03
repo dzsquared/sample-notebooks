@@ -55,7 +55,7 @@ jobs:
       - name: Archive to tar
         run: |
           touch jupyterbook.tar.gz
-          tar -czvf --exclude=/jupyterbook.tar.gz jupyterbook.tar.gz .
+          tar -czvf --exclude=jupyterbook.tar.gz jupyterbook.tar.gz .
         # - name: Archive to tar
       #   uses: thedoctor0/zip-release@master
       #   with:
