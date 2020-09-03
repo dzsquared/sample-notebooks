@@ -50,13 +50,19 @@ jobs:
   tarzip:
     runs-on: ubuntu-latest
     steps:
+      - name: Test input values
+        run: |
+          echo "directory: ${{ github.events.inputs.directory }}"
+          echo "final file name: ${{ github.events.inputs.bookname }}-${{ github.events.inputs.versionnumber }}-${{ github.events.inputs.languageid }}"
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Archive to zip
         uses: thedoctor0/zip-release@master
         with:
           filename: jupyterbook.zip
-          directory: ${{ github.events.inputs.directory }}
+          path: '.'
+          directory: '.'
+          exclusions: ''
           type: "zip"
       - name: Archive to tar
         uses: thedoctor0/zip-release@master
