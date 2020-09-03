@@ -85,7 +85,7 @@ jobs:
       - name: Archive to tar
         run: |
           touch jupyterbook.tar.gz
-          tar -czvf --exclude=jupyterbook.tar.gz --exclude=jupyterbook.zip jupyterbook.tar.gz .
+          tar -czvf jupyterbook.tar.gz --exclude=jupyterbook.tar.gz --exclude=jupyterbook.zip .
       - name: Upload tar
         id: upload-tar
         uses: actions/upload-release-asset@v1
