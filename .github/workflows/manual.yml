@@ -1,0 +1,97 @@
+# This is a basic workflow that is manually triggered
+
+name: Manual workflow
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      releasename:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'Release name'
+        # Default value if no value is explicitly provided
+        #default: 'Notebooks'
+        # Input has to be provided for the workflow to run
+        required: true
+      bookname:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'Book name'
+        # Default value if no value is explicitly provided
+        #default: 'Notebooks'
+        # Input has to be provided for the workflow to run
+        required: true
+      versionnumber:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'Version number'
+        # Default value if no value is explicitly provided
+        #default: 'Notebooks'
+        # Input has to be provided for the workflow to run
+        required: true
+      languageid:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'Language id'
+        # Default value if no value is explicitly provided
+        default: 'EN'
+        # Input has to be provided for the workflow to run
+        required: true
+      directory:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'Directory (leave blank for all files)'
+        # Default value if no value is explicitly provided
+        default: './'
+        # Input has to be provided for the workflow to run
+        required: true
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # create zip and tar.gz files
+  tarzip:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Archive to zip
+        uses: thedoctor0/zip-release@master
+        with:
+          filename: "${{ github.events.inputs.bookname }}-${{ github.events.inputs.versionnumber }}-${{ github.events.inputs.languageid }}.zip"
+          directory: ${{ github.events.inputs.directory }}"
+          type: "zip"
+      - name: Archive to tar
+        uses: thedoctor0/zip-release@master
+        with:
+          filename: "${{ github.events.inputs.bookname }}-${{ github.events.inputs.versionnumber }}-${{ github.events.inputs.languageid }}.tar.gz"
+          directory: ${{ github.events.inputs.directory }}"
+          type: "tar"
+      - name: Create release
+        id: create_release
+        uses: actions/crease-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: "Automated"
+          release_name: ${{ github.events.inputs.releasename }}
+          draft: false
+          prerelease: false
+      - name: Upload zip
+        id: upload-zip
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with: 
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path:  ./${{ github.events.inputs.bookname }}-${{ github.events.inputs.versionnumber }}-${{ github.events.inputs.languageid }}.zip
+          asset_name: ${{ github.events.inputs.bookname }}-${{ github.events.inputs.versionnumber }}-${{ github.events.inputs.languageid }}.zip
+          asset_content_type: application/zip
+      - name: Upload tar
+        id: upload-tar
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with: 
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path:  ./${{ github.events.inputs.bookname }}-${{ github.events.inputs.versionnumber }}-${{ github.events.inputs.languageid }}.tar.gz
+          asset_name: ${{ github.events.inputs.bookname }}-${{ github.events.inputs.versionnumber }}-${{ github.events.inputs.languageid }}.tar.gz
+          asset_content_type: application/x-compressed-tar
+        #run: echo "Hello ${{ github.event.inputs.name }}"
