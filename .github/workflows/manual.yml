@@ -55,14 +55,14 @@ jobs:
       - name: Archive to zip
         uses: thedoctor0/zip-release@master
         with:
-          filename: "${{ github.events.inputs.bookname }}-${{ github.events.inputs.versionnumber }}-${{ github.events.inputs.languageid }}.zip"
-          directory: ${{ github.events.inputs.directory }}"
+          filename: ${{ github.events.inputs.bookname }}-${{ github.events.inputs.versionnumber }}-${{ github.events.inputs.languageid }}.zip
+          directory: ${{ github.events.inputs.directory }}
           type: "zip"
       - name: Archive to tar
         uses: thedoctor0/zip-release@master
         with:
-          filename: "${{ github.events.inputs.bookname }}-${{ github.events.inputs.versionnumber }}-${{ github.events.inputs.languageid }}.tar.gz"
-          directory: ${{ github.events.inputs.directory }}"
+          filename: ${{ github.events.inputs.bookname }}-${{ github.events.inputs.versionnumber }}-${{ github.events.inputs.languageid }}.tar.gz
+          directory: ${{ github.events.inputs.directory }}
           type: "tar"
       - name: Create release
         id: create_release
