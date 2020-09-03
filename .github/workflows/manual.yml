@@ -52,9 +52,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      - name: Get current date
-        id: date
-        run: echo "::set-output name=date::$(date +'%Y-%m-%dT%H:%M:%S')"
       - name: Archive to zip
         uses: thedoctor0/zip-release@master
         with:
@@ -62,16 +59,6 @@ jobs:
           directory: ${{ github.event.inputs.directory }}
           type: "zip"
           exclusions: "jupyterbook.tar.gz"
-      - name: Archive to tar
-        run: |
-          touch jupyterbook.tar.gz
-          tar -czvf --exclude=jupyterbook.tar.gz --exclude=jupyterbook.zip jupyterbook.tar.gz .
-        # - name: Archive to tar
-      #   uses: thedoctor0/zip-release@master
-      #   with:
-      #     filename: jupyterbook.tar.gz
-      #     directory: ${{ github.event.inputs.directory }}
-      #     type: "tar"
       - name: Create release
         id: create_release
         uses: actions/create-release@v1
@@ -82,6 +69,9 @@ jobs:
           release_name: ${{ github.event.inputs.releasename }}
           draft: false
           prerelease: false
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%dT%H:%M:%S')"
       - name: Upload zip
         id: upload-zip
         uses: actions/upload-release-asset@v1
@@ -92,6 +82,10 @@ jobs:
           asset_path:  ./jupyterbook.zip
           asset_name: ${{ github.event.inputs.bookname }}-${{ github.event.inputs.versionnumber }}-${{ github.event.inputs.languageid }}.zip
           asset_content_type: application/zip
+      - name: Archive to tar
+        run: |
+          touch jupyterbook.tar.gz
+          tar -czvf --exclude=jupyterbook.tar.gz --exclude=jupyterbook.zip jupyterbook.tar.gz .
       - name: Upload tar
         id: upload-tar
         uses: actions/upload-release-asset@v1
