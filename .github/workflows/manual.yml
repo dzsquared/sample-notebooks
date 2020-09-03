@@ -52,6 +52,9 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
       - name: Archive to tar
         run: |
           touch jupyterbook.tar.gz
@@ -75,7 +78,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: "Automated"
+          tag_name: "${{ steps.date.outputs.date }}"
           release_name: ${{ github.event.inputs.releasename }}
           draft: false
           prerelease: false
