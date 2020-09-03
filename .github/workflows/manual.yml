@@ -38,9 +38,9 @@ on:
         required: true
       directory:
         # Friendly description to be shown in the UI instead of 'name'
-        description: 'Directory (leave blank for all files)'
+        description: 'Directory (leave "." for all files)'
         # Default value if no value is explicitly provided
-        default: './'
+        default: '.'
         # Input has to be provided for the workflow to run
         required: true
 
