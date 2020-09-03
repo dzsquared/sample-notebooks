@@ -55,17 +55,6 @@ jobs:
       - name: Get current date
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
-      - name: Archive to tar
-        run: |
-          touch jupyterbook.tar.gz
-          touch jupyterbook.zip
-          tar -czvf --exclude=jupyterbook.tar.gz --exclude=jupyterbook.zip jupyterbook.tar.gz .
-        # - name: Archive to tar
-      #   uses: thedoctor0/zip-release@master
-      #   with:
-      #     filename: jupyterbook.tar.gz
-      #     directory: ${{ github.event.inputs.directory }}
-      #     type: "tar"
       - name: Archive to zip
         uses: thedoctor0/zip-release@master
         with:
@@ -73,6 +62,16 @@ jobs:
           directory: ${{ github.event.inputs.directory }}
           type: "zip"
           exclusions: "jupyterbook.tar.gz"
+      - name: Archive to tar
+        run: |
+          touch jupyterbook.tar.gz
+          tar -czvf --exclude=jupyterbook.tar.gz --exclude=jupyterbook.zip jupyterbook.tar.gz .
+        # - name: Archive to tar
+      #   uses: thedoctor0/zip-release@master
+      #   with:
+      #     filename: jupyterbook.tar.gz
+      #     directory: ${{ github.event.inputs.directory }}
+      #     type: "tar"
       - name: Create release
         id: create_release
         uses: actions/create-release@v1
