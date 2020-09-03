@@ -62,12 +62,14 @@ jobs:
           filename: jupyterbook.zip
           directory: ${{ github.event.inputs.directory }}
           type: "zip"
-      # - name: Archive to tar
-      #   uses: thedoctor0/zip-release@master
-      #   with:
-      #     filename: jupyterbook.tar.gz
-      #     directory: ${{ github.event.inputs.directory }}
-      #     type: "tar"
+          exclusions: "*.tar.gz"
+      - name: Archive to tar
+        uses: thedoctor0/zip-release@master
+        with:
+          filename: jupyterbook.tar.gz
+          directory: ${{ github.event.inputs.directory }}
+          type: "tar"
+          exclusions: "*.zip"
       - name: Create release
         id: create_release
         uses: actions/create-release@v1
@@ -88,14 +90,13 @@ jobs:
           asset_path:  ./jupyterbook.zip
           asset_name: ${{ github.event.inputs.bookname }}-${{ github.event.inputs.versionnumber }}-${{ github.event.inputs.languageid }}.zip
           asset_content_type: application/zip
-      # - name: Upload tar
-      #   id: upload-tar
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with: 
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #     asset_path:  ./jupyterbook.tar.gz
-      #     asset_name: ${{ github.event.inputs.bookname }}-${{ github.event.inputs.versionnumber }}-${{ github.event.inputs.languageid }}.tar.gz
-      #     asset_content_type: application/x-compressed-tar
-        #run: echo "Hello ${{ github.event.inputs.name }}"
+      - name: Upload tar
+        id: upload-tar
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with: 
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path:  ./jupyterbook.tar.gz
+          asset_name: ${{ github.event.inputs.bookname }}-${{ github.event.inputs.versionnumber }}-${{ github.event.inputs.languageid }}.tar.gz
+          asset_content_type: application/x-compressed-tar
