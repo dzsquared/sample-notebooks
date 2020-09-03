@@ -9,39 +9,21 @@ on:
     # Inputs the workflow accepts.
     inputs:
       directory:
-        # Friendly description to be shown in the UI instead of 'name'
-        description: 'Jupyter Book to Release (leave "." for all files)'
-        # Default value if no value is explicitly provided
+        description: 'Jupyter Book to Release (defaults to whole repository)'
         default: '.'
-        # Input has to be provided for the workflow to run
         required: true
       releasename:
-        # Friendly description to be shown in the UI instead of 'name'
         description: 'Release name'
-        # Default value if no value is explicitly provided
-        #default: 'Notebooks'
-        # Input has to be provided for the workflow to run
         required: true
       bookname:
-        # Friendly description to be shown in the UI instead of 'name'
         description: 'Book name'
-        # Default value if no value is explicitly provided
-        #default: 'Notebooks'
-        # Input has to be provided for the workflow to run
         required: true
       versionnumber:
-        # Friendly description to be shown in the UI instead of 'name'
         description: 'Version number'
-        # Default value if no value is explicitly provided
-        #default: 'Notebooks'
-        # Input has to be provided for the workflow to run
         required: true
       languageid:
-        # Friendly description to be shown in the UI instead of 'name'
         description: 'Language id'
-        # Default value if no value is explicitly provided
         default: 'EN'
-        # Input has to be provided for the workflow to run
         required: true
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -54,18 +36,11 @@ jobs:
         uses: actions/checkout@v2
       - name: Archive to zip
         run: |
-          zip -r jupyterbook.zip . -x jupyterbook.tar.gz
+          zip -r jupyterbook.zip * -x jupyterbook.tar.gz
       - name: Archive to tar
         run: |
           touch jupyterbook.tar.gz
-          tar -czvf jupyterbook.tar.gz --exclude=jupyterbook.tar.gz --exclude=jupyterbook.zip .
-      # - name: Archive to zip
-      #   uses: thedoctor0/zip-release@master
-      #   with:
-      #     filename: jupyterbook.zip
-      #     directory: ${{ github.event.inputs.directory }}
-      #     type: "zip"
-      #     exclusions: "jupyterbook.tar.gz"
+          tar -czvf jupyterbook.tar.gz --exclude=jupyterbook.tar.gz --exclude=jupyterbook.zip *
       - name: Get current date
         id: date
         run: echo "::set-output name=date::$(date +%Y%m%dT%H%M%S)"
