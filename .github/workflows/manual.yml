@@ -35,7 +35,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Publish book
-        uses: dzsquared/jupyter-publish-action@v0.0.16
+        uses: dzsquared/jupyter-publish-action@v0.0.17
         with:
           directory: ${{ github.event.inputs.directory }}
           releasename:  ${{ github.event.inputs.releasename }}
