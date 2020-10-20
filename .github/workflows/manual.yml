@@ -32,7 +32,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Publish book
-        uses: dzsquared/jupyter-publish-action@v0.0.23
+        uses: dzsquared/jupyter-publish-action@v0.1.0
         with:
           directory: ${{ github.event.inputs.directory }}
           releasename:  ${{ github.event.inputs.releasename }}
