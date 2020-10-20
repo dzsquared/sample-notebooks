@@ -1,9 +1,7 @@
 # This is a basic workflow that is manually triggered
-
-name: Manual workflow
+name: Remote Jupyter Book
 
 # Controls when the action will run. Workflow runs when manually triggered using the UI
-# or API.
 on:
   workflow_dispatch:
     # Inputs the workflow accepts.
@@ -28,14 +26,13 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # create zip and tar.gz files
   RemoteBook:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
       - name: Publish book
-        uses: dzsquared/jupyter-publish-action@v0.0.22
+        uses: dzsquared/jupyter-publish-action@v0.0.23
         with:
           directory: ${{ github.event.inputs.directory }}
           releasename:  ${{ github.event.inputs.releasename }}
@@ -43,43 +40,3 @@ jobs:
           versionnumber: ${{ github.event.inputs.versionnumber }}
           languageid: ${{ github.event.inputs.languageid }}
           githubtoken: ${{ secrets.GITHUB_TOKEN }}
-      # - name: Archive to zip
-      #   run: |
-      #     zip -r jupyterbook.zip * -x jupyterbook.tar.gz
-      # - name: Archive to tar
-      #   run: |
-      #     touch jupyterbook.tar.gz
-      #     tar -czvf jupyterbook.tar.gz --exclude=jupyterbook.tar.gz --exclude=jupyterbook.zip *
-      # - name: Get current date
-      #   id: date
-      #   run: echo "::set-output name=date::$(date +%Y%m%dT%H%M%S)"
-      # - name: Create release
-      #   id: create_release
-      #   uses: actions/create-release@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     tag_name: "${{ steps.date.outputs.date }}"
-      #     release_name: ${{ github.event.inputs.releasename }}
-      #     draft: false
-      #     prerelease: false
-      # - name: Upload zip
-      #   id: upload-zip
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with: 
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #     asset_path:  ./jupyterbook.zip
-      #     asset_name: ${{ github.event.inputs.bookname }}-${{ github.event.inputs.versionnumber }}-${{ github.event.inputs.languageid }}.zip
-      #     asset_content_type: application/zip
-      # - name: Upload tar
-      #   id: upload-tar
-      #   uses: actions/upload-release-asset@v1
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with: 
-      #     upload_url: ${{ steps.create_release.outputs.upload_url }}
-      #     asset_path:  ./jupyterbook.tar.gz
-      #     asset_name: ${{ github.event.inputs.bookname }}-${{ github.event.inputs.versionnumber }}-${{ github.event.inputs.languageid }}.tar.gz
-      #     asset_content_type: application/x-compressed-tar
