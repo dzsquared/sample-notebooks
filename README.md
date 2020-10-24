@@ -8,6 +8,14 @@ Found in the repository .github/workflows folder, the [manual.yml](.github/workf
 ### Manual Workflow
 The action is manually triggered by navigating to [Actions](../actions), selecting "Manual workflow" from the list of workflows on the left, and clicking the "Run workflow" button that appears on the right.
 
+This will reveal a dialog box requesting the following information:
+- directory: Jupyter Book to Release (defaults to whole repository)
+- releasename: Release name
+- bookname: Book name
+- versionnumber: Version number
+- languageid: Language id
+
+
 ## Layout of the Sample Jupyter Book
 - _data/toc.yml
 - content
